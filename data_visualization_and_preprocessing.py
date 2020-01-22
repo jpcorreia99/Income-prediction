@@ -18,25 +18,26 @@ df_test.replace(' >50K.', ' >50K', inplace = True)
 df_test.replace(' <=50K.', ' <=50K', inplace = True)
 
 #after analising we see that the missing values are in categorical collumns, so there's no use in filling nan's
+print("Train data before droppin nan's:\n")
 print(df_train.info())
+print("\n\nTrain data before droppin nan's:\n")
 print(df_train.info())
 
 df_train.dropna(inplace = True)
 df_test.dropna(inplace = True)
-
+print("\n\nTrain data after droppin nan's:\n")
 print(df_train.info()) #30162 elements
+print("\n\nTest data after droppin nan's:\n")
 print(df_test.info()) #15060
 
 df_train_2 = df_train.copy() #this will be used later to
 df_test_2 = df_test.copy()
 
 #see correlation between numeric features
-numeric_features = ['age','fnlwgt','education_num','capital_gain','capital_loss','hours_per_week','income_category']
-
 features_to_encode = ["workclass","marital_status","occupation","relationship","race","sex","native_country","income_category"]
 #labels to encode
 #Versão labelEncoded
-from sklearn.metrics import f1_score, accuracy_score, recall_score
+from sklearn.metrics import f1_score, accuracy_score, recall_score, confusion_matrix
 from sklearn.preprocessing import LabelEncoder
 
 label_encoder = LabelEncoder()
@@ -46,16 +47,12 @@ for feature in features_to_encode:
     encoded_feature = label_encoder.transform(df_test[feature])
     df_test[feature] = encoded_feature
 
-
-corr_matrix = df_train.corr()
-print(corr_matrix["income_category"].sort_values(ascending=False))
-
 #testing models
 
 x_train = df_train.drop("income_category",axis=1) #inplace = True, altera diretamente os dados, False, retorna uma cópia
-y_train = np.array(df_train[["income_category"]])
+y_train =df_train[["income_category"]]
 x_test = df_test.drop("income_category",axis=1)
-y_test = np.array(df_test[["income_category"]])
+y_test = df_test[["income_category"]]
 
 
 
@@ -70,9 +67,11 @@ random_forest_classifier = RandomForestClassifier()
 random_forest_classifier.fit(x_train, y_train)
 
 label_encoded_predictions = random_forest_classifier.predict(x_test)
+print("--- Metric when categorical features are just label encoded---")
 print("accuracy: ", accuracy_score(y_test, label_encoded_predictions))
 print("recall: ", recall_score(y_test, label_encoded_predictions))
 print("f1 score: ", f1_score(y_test, label_encoded_predictions))
+print("Confusion Matrix: \n", confusion_matrix(y_test, label_encoded_predictions))
 
 
 
@@ -84,9 +83,11 @@ features_to_encode = ["workclass","marital_status","occupation","relationship","
 df_train_2["income_category"] = label_encoder.fit_transform(df_train_2[["income_category"]])
 df_test_2["income_category"] = label_encoder.transform(df_test_2[["income_category"]])
 
-y_train_2 = df_train_2["income_category"]
+# values will give the values in an array. (shape: (n,1)
+# ravel will convert that array shape to (n, )
+y_train_2 = df_train_2["income_category"].values.ravel()
 x_train_2 = df_train_2.drop("income_category", axis =1)
-y_test_2 = df_test_2["income_category"]
+y_test_2 = df_test_2["income_category"].values.ravel()
 x_test_2 = df_test_2.drop("income_category", axis =1)
 
 one_hot_encoder = OneHotEncoder()
@@ -100,14 +101,29 @@ for feature in features_to_encode:
 
 random_forest_classifier.fit(df_train_2,y_train_2)
 one_hot_predictions = random_forest_classifier.predict(df_test_2)
+
+print("--- Metric when categorical features are one-hot-encoded---")
 print("accuracy: ", accuracy_score(y_test, one_hot_predictions))
 print("recall: ", recall_score(y_test, one_hot_predictions))
 print("f1 score: ", f1_score(y_test, one_hot_predictions))
+print("Confusion Matrix: \n", confusion_matrix(y_test, one_hot_predictions))
 
 
 
+#Now that
+corr_matrix = df_train.corr()
+print("\nCorrelations between income_category:")
+print(corr_matrix["income_category"].sort_values(ascending=False))
 
+#we can drop fnlwgt
 
+x_train = x_train.drop("fnlwgt", axis = 1)
+x_test = x_test.drop("fnlwgt", axis =  1)
 
+#save them all
+x_train.to_pickle("x_train")
+y_train.to_pickle("y_train")
+x_test.to_pickle("x_test")
+y_test.to_pickle("y_test")
 
 
