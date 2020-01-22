@@ -6,9 +6,9 @@ header = ["age","workclass","fnlwgt","education","education_num","marital_status
 
 
 
-df_train = pd.read_csv("adult.data", names = header, index_col = False)
+df_train = pd.read_csv("unprocessed_data/adult.data", names = header, index_col = False)
 df_train.drop("education",axis=1, inplace=True) #education-num is basically the same
-df_test = pd.read_csv("adult.test", names = header, index_col = False, skiprows=1)
+df_test = pd.read_csv("unprocessed_data/adult.test", names = header, index_col = False, skiprows=1)
 df_test.drop("education",axis =1,  inplace=True)
 
 #two different ways of dealing with missing data
@@ -121,9 +121,9 @@ x_train = x_train.drop("fnlwgt", axis = 1)
 x_test = x_test.drop("fnlwgt", axis =  1)
 
 #save them all
-x_train.to_pickle("x_train")
-y_train.to_pickle("y_train")
-x_test.to_pickle("x_test")
-y_test.to_pickle("y_test")
+x_train.to_pickle("preprocessed_data/x_train")
+y_train.to_pickle("preprocessed_data/y_train")
+x_test.to_pickle("preprocessed_data/x_test")
+y_test.to_pickle("preprocessed_data/y_test")
 
 
