@@ -1,7 +1,7 @@
 # Income Prediction
 This projects shows the steps from getting a dataset containing census data to finding a machine learning model to predict how much money does a person make.
 
-#Content
+# Content
  - The Dataset
  - Data visualization and Preprocessing
    - Handling missing data
