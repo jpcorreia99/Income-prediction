@@ -11,12 +11,17 @@ This projects shows the steps from getting a dataset containing census data to f
  
  - Model Selection
    - Cross Validation score
-   - Confusion Matrix
-   - Accuracy Score
-   - Recall Score
+   - Confusion matrix
+   - Accuracy score
+   - Recall score
    - F1 score
-   - Area under ROC Curve
+   - Area under ROC curve
    - Models tested
+   
+ - Fine-Tuning The Model
+   - Grid Search
+   - Random Search 
+   - Ensemble methods
 
 ## The Dataset
 This dataset in based in the 1994 Census Data, it can be found [here](https://archive.ics.uci.edu/ml/datasets/Adult).
@@ -145,6 +150,43 @@ The following estimators we're tested:
 
 On all the metrics, Random Forest Classifier had the best results.
 
-Now, that the model to use is decided, it needs to be fine tuned to increase performance.
 
-# Fine tuning the model
+## Fine-tuning the model
+Now, that the model to use is decided, it needs to be fine tuned to increase performance.
+A technique to find the model's parameters who give it the best accuracy has to be implemented. 
+
+As in most machine learning, some things are more usually done empirically instead of analytically. That is the case of techniques to fine tune an algorithm.
+ 
+One of the most used techniques is called grid search.
+
+### Grid Search And Randomized Search
+In the grid search technique, a dict of what hiperparameters' values to test is defines. Those values are then tested in combination (forming a grid), and the best combination is returned.
+
+The search range is then reduced as an attempt to find better parameters
+
+ex of the evolution of a dict:
+ 
+```python 
+
+ param_grid = [
+    {'n_estimators':[10,50,100,200],'max_features':[3,6,9,12]},
+ ]
+
+#first result {'max_features': 3, 'n_estimators': 200}
+
+param_grid = [
+    {'n_estimators':[200,400,600],'max_features':[2,3,4]},
+]
+#second result {'max_features': 3, 'n_estimators': 400} score:  0.8448207171314741
+
+param_grid = [
+    {'n_estimators':[350,400,450],'max_features':[3]},
+]
+#third result {'max_features': 3, 'n_estimators': 450} score:  0.8462815405046481
+
+
+```
+
+Another technique is to, instead of defining the hiperparameters' values to test, define an interval and let the algorithm take random numbers from it. This is called **Randomized Search**.
+
+![grid search and randomized search](README_imgs/grid_search_and_randomized_search.png)
