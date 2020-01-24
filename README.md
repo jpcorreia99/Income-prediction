@@ -19,7 +19,7 @@ In this project, data extracted from the 1994 census is used to predict and indi
    - **[Area under ROC curve](#area-under-roc-curve)**
    - **[Models tested](#models-tested)**
    
- - **Fine-Tuning The Model**
+ - **[Fine-Tuning The Model](#fine-tuning-the-model)**
    - **[Grid Search and Randomized Search](#grid-search-and-randomized-search)**
    - **[Feature Importance](#feature-importance)**
 
