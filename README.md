@@ -57,9 +57,9 @@ The features contained in the dataset are as follow:
  ### Numerical features
  Numeric features are a bit more easy to visualize and process because they already are in a numeric basis, so most mathematical operations can be performed on them. 
  
- One thing to note is that most models don't handle well with different ranges (ex: age can be somewhere in the interval [18, 100] while education_num is ussually in the [5,20] interval). In order to prevent this problem, the numerical features are **standardized**.
+ One thing to note is that most models don't handle well features with different ranges (ex: age can be somewhere in the interval [18, 100] while education_num is ussually in the [5,20] interval). In order to prevent this problem, the numerical features are **standardized**.
  
- In the standardization process the data is rescaled in order for the mean to have a value of 0 and a standard deviation of 1. This is achieved by subtracting each element by the mean and dividing the result by the standard deviation.
+ In the standardization process the data is rescaled in order to have a mean value of 0 and  standard deviation of 1. This is achieved by subtracting each element by the mean and dividing the result by the standard deviation.
  
  ![standardization formula](README_imgs/standardization.png)
  
@@ -72,16 +72,18 @@ The features contained in the dataset are as follow:
  
  This can result in a problem regarding numerical order since cat, dog and rat don't have any kind of relation between them, but the numbers 0, 1 and 2 have: we can say that 2 is the double of 1 but we can't say that rat is the double of dog, but the classifier can learn these relations and be induced into wrong predictions.
  
- To solve this problem the features can be encoded using **one-hot encoding**. One hot encoding implies creating a column for each class of a feature. Then, for each entry, only one of these columns will have the value 1, this will be the column corresponding to the class of the entry, the image below may help to understan how the encoding works.
+ To solve this problem the features can be encoded using One-Hot Encoding. 
+ 
+ **One-Hot Encoding** implies creating a column for each class of a feature. Then, for each entry, only one of these columns will have the value 1, this will be the column corresponding to the class of the entry, the image below may help to understan how the encoding works.
  
  ![One-hot encoding](README_imgs/one-hot-encoding.png)
  
- This being said, after conducting some experiments, using this dataset, there's no significant difference in accuracy between normally encoding the features or one hot encoding them, so, for simplification reasons, the features are just normally encoded.
+ This being said, after conducting some experiments with this dataset, there's no significant difference in accuracy between normally encoding the features or one hot encoding them, so, for simplification reasons, the features are just normally encoded.
  
  These features are then also standardized as the numerical features were.
  
  ### Checking correlation
- After handling the features, the correlation matrix is calculated. This is a matrix that shows how each features correlates to eachother. After checking the correlations to "income_category", the feature "fnlwgt" is dropped since it has almost no correlation.
+ After handling the features, the correlation matrix is calculated. This is a matrix that shows how each features correlates to the others. After checking the correlations to "income_category", the feature "fnlwgt" is dropped since it has almost no correlation.
  
  Some dimensionality reduction techniques, such as PCA, could be applied, but since this is already a dataset with few features, there's no significant practical advantage to it.
  
@@ -90,12 +92,12 @@ The features contained in the dataset are as follow:
  The dataset was stored in the **preprocessed_data** folder.
  
 ## Model Selection
-There are many models that can do binary classification, so there has to be some way of comparing them in order to decide which one to use. Fortunately there are, and there are many.
+There are many models that can be used for binary classification, so there has to be some way of comparing them in order to decide which one to use. Fortunately there are, and there are many.
 
 ### Cross Validation Score
-This is a way of getting a model's score on the training data without overfitting the model/estimator. The data is divided in k splits. For k times, k-1 data folds are given to the model as training data and the remaining fold is used as test data. 
+This is a way of getting a model's score on the training data without overfitting the model/estimator. The data is divided in k splits. For k times, k-1 data folds are given to the model as training data and the remaining fold is used as test data, providing a score for that fold. 
 
-These scores are then averaged to get the real score.
+The k scores are then averaged to get the real score.
 
 ![cross_validation_example](README_imgs/cross_validation.png)
 ### Confusion Matrix
@@ -104,9 +106,9 @@ The confusion matrix is a matrix where the rows indicate the true label of the d
 
 The image below exemplifies a confusion matrix for a binary classification problem:
 
-![confusion matrix](README_imgs/confusion matrix.png)
+![confusion matrix](README_imgs/confusion_matrix.png)
 
-In this example, there we're 60 NO instances, of them, 50 we're classified as NO's and 10 we're classified as YES.
+In this example, there we're 60 NO instances. Of them, 50 we're classified as NO's and 10 we're classified as YES.
 
 This view of the model's prediction can be used to introduce some terms:
 
@@ -126,7 +128,7 @@ Knowing these terms, some useful metrics can be calculated.
 
 The first one is accuracy. The accuracy score measures how many of the entries that the model predicted were positive were actually true.
 
-This is done by deviding the number of true positives by the sum of True positives and False Positives.
+This is done by dividing the number of true positives by the sum of True Positives and False Positives.
 
 ![accuracy_score](README_imgs/accuracy_score.png)
 ### Recall Score
@@ -140,7 +142,7 @@ The f1 is a combination of the precision and recall metris. It is the harmonic m
 ![f1_score](README_imgs/f1_score.jpg)
 
 ### Area under ROC Curve
-The ROC curve (receiver operating characteristics) plots the True Positive Rate against the False Positive Rate. It plots the model's sensitivity agains't it's willingness to classify more things as truw.
+The ROC curve (receiver operating characteristics) plots the True Positive Rate against the False Positive Rate. It plots the model's sensitivity agains't it's willingness to classify more data as true.
 
 The perfect classifier wil have a TPR or 1 to a FPR of 1, therefore, the area under the ROC curve for the ideal model would be 1. So, a way to compare model's it to see how the value of the Area under Cure (AUC or AOC)
 
@@ -157,10 +159,10 @@ On all the metrics, Random Forest Classifier had the best results.
 
 
 ## Fine-tuning the model
-Now, that the model to use is decided, it needs to be fine tuned to increase performance.
+Now, that the model to use is decided, it needs to be fine-tuned to increase performance.
 A technique to find the model's parameters who give it the best accuracy has to be implemented. 
 
-As in most machine learning, some things are more usually done empirically instead of analytically. That is the case of techniques to fine tune an algorithm.
+As in most machine learning, some things are usually done empirically instead of analytically. That is the case of techniques to fine tune an algorithm.
  
 One of the most used techniques is called grid search.
 
@@ -169,7 +171,7 @@ In the grid search technique, a dict of what hiperparameters' values to test is 
 
 The search range is then reduced as an attempt to find better parameters
 
-ex of the evolution of a dict:
+Example of the evolution of a dict:
  
 ```python 
 
@@ -201,4 +203,5 @@ After the hyperparameter searching process is over, the importance of the featur
  
  The more irrelevant features can be dropped to see if that implies any increase in the model's score.
 
+And that's it! The model can now be used to guess some $$$.
 
