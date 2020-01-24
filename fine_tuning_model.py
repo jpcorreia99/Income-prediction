@@ -34,7 +34,6 @@ grid_search = GridSearchCV(forest_reg, param_grid,
 grid_search.fit(x_train, y_train)
 print(grid_search.best_params_)
 
-
 best_estimator = grid_search.best_estimator_
 best_estimator.fit(x_train,y_train)
 print("score: ", best_estimator.score(x_test,y_test))
@@ -43,7 +42,7 @@ print("score: ", best_estimator.score(x_test,y_test))
 #second result {'max_features': 3, 'n_estimators': 400} score:  0.8448207171314741
 #third result {'max_features': 3, 'n_estimators': 450} score:  0.8462815405046481
 
-#ENSEMBLE METHODS
+#Check feature importante
 feature_importances = grid_search.best_estimator_.feature_importances_
 features = ["age","workclass","education_num","marital_status","occupation","relationship","race","sex",
           "capital_gain","capital_loss","hours_per_week","native_country"]
@@ -57,7 +56,7 @@ print("score: ", best_estimator.score(x_test,y_test))
 
 #the score is improved minimally
 import pickle
-#pickle.dump(best_estimator, open("best_estimator.pickle", "wb"))
+pickle.dump(best_estimator, open("best_estimator.pickle", "wb"))
 
 # Randomized Search example
 '''
